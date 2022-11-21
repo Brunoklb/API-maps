@@ -1,4 +1,3 @@
-import "./models.js";
 import express from "express";
 import { PORT } from "./env.js";
 import { BloodCenter } from "./bloodCenter.js";
@@ -33,7 +32,6 @@ app.use((error, req, res, next) => {
 });
 
 async function run() {
-  //await db.sync();
   app.listen(PORT, () => {
     console.log("server running on http://localhost:" + PORT);
   });

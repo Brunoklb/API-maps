@@ -6,6 +6,7 @@ import { BloodCenter } from "./bloodCenter.js";
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }))
 
 app.get("/bloodCenters", async (req, res) => {
   const centers = await BloodCenter.findAll();
@@ -13,15 +14,23 @@ app.get("/bloodCenters", async (req, res) => {
 });
 
 app.post("/bloodCenters", async (req, res) => {
-  const { coordinates } = req.body;
-  if (!coordinates) {
+  const { lat, lng } = req.body;
+  console.log(req.body)
+  if (!lat) {
     return res
       .status(400)
-      .send("missing coordinates attribute on request body");
+      .send("missing lat attribute on request body");
+  }
+  if (!lng) {
+    return res
+      .status(400)
+      .send("missing lng attribute on request body");
   }
   let center = new BloodCenter({
     ...req.body,
-    point: { type: "Point", coordinates },
+    point: {
+      type: "Point", coordinates: [lat, lng]
+    },
   });
 
   try {

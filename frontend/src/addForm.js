@@ -1,30 +1,40 @@
-import { baseURL } from "./baseUrl";
-import { useForm } from "react-hook-form";
+import { api } from "./api";
+import { RequiredIndicator } from "./requiredIndicator";
 
 export function AddForm({ position }) {
-  
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
-  const onSubmit = data => console.log(data);
 
-  console.log(watch("example")); // watch input value by passing the name of it
+  async function handleSumbit(e) {
+    e.preventDefault()
+    const data = new FormData(e.target);
+    await api.post('/bloodCenters', data)
+  }
 
   return (
     <div className="p-4 flex flex-col gap-2 shadow z-10 h-full justify-center">
       <h1 className="text-lg">Adicionar Hemonúcleo</h1>
       <form
-        action={baseURL + '/bloodCenters'}
-        onSubmit={handleSubmit(onSubmit)}
-        method="post" className="flex flex-col gap-2 p-2">
+        onSubmit={handleSumbit}
+        className="flex flex-col gap-2 p-2">
         <label>
-          Nome <span className="text-red-500" title="obrigatório">*</span>
-          <input type="text" id="name"  {...register("name", {})} required />
+          Nome <RequiredIndicator></RequiredIndicator>
+          <input type="text" name="name" required />
         </label>
         <label>
-          Email
-          <input type="email" id="email" />
+          Email <RequiredIndicator></RequiredIndicator>
+          <input type="email" name="email" defaultValue={null} />
         </label>
-        <input type='hidden' id="lat" value={position?.lat}></input>
-        <input type='hidden' id="lng" value={position?.lng}></input>
+        {position &&
+          <>
+            <input
+              name="lat"
+              type='hidden'
+              value={position.lat()}></input>
+            <input
+              name="lng"
+              type='hidden'
+              value={position.lng()}></input>
+          </>
+        }
         <button
           type="submit"
           disabled={!position}
@@ -35,6 +45,6 @@ export function AddForm({ position }) {
         {!position &&
           <div>Clique no mapa para selecionar o local</div>}
       </form>
-    </div>
+    </div >
   );
 }

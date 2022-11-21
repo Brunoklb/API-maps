@@ -1,3 +1,3 @@
-export function coordinatesFromPosition(position){
-    return [position.lat, position.lng]
+export function coordinatesFromPosition(position) {
+    return [position.lat(), position.lng()]
 }

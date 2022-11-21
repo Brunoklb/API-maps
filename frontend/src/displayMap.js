@@ -14,8 +14,7 @@ export function DisplayMapImplementation({ setSelected }) {
 
   async function getCenters() {
     const res = await api.get("/bloodCenters");
-    const data = JSON.parse(res.data);
-    setCenters(data);
+    setCenters(res.data);
   }
 
   useEffect(() => {
@@ -39,7 +38,9 @@ export function DisplayMapImplementation({ setSelected }) {
           <Marker
             key={center.id}
             position={position}
-            onClick={() => { setSelected(center) }}
+            onClick={() => {
+              setSelected(center);
+            }}
           ></Marker>
         );
       })}

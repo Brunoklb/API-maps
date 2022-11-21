@@ -12,12 +12,9 @@ app.get("/bloodCenters", async (req, res) => {
 });
 
 app.post("/bloodCenters", async (req, res) => {
-  console.log("here");
   let center = new BloodCenter(req.body);
   try {
-    console.log("validará");
     await center.validate();
-    console.log("validou");
   } catch (details) {
     return res.status(400).json({
       details,

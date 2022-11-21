@@ -11,14 +11,21 @@ app.get("/bloodCenters", async (req, res) => {
 });
 
 app.post("/bloodCenters", async (req, res) => {
-  let center = new BloodCenter(req.body);
+  const { coordinates } = req.body;
+  if (!coordinates) {
+    return res
+      .status(400)
+      .send("missing coordinates attribute on request body");
+  }
+  let center = new BloodCenter({
+    ...req.body,
+    point: { type: "Point", coordinates },
+  });
+
   try {
     await center.validate();
   } catch (details) {
-    return res.status(400).json({
-      details,
-      error: "bad request",
-    });
+    return res.status(400).json(details);
   }
   await center.save();
   res.status(201).json(center);

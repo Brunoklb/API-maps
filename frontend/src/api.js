@@ -1,5 +1,5 @@
 import axios from "axios";
-import { baseURL } from "./baseUrl";
+import { baseURL } from "./env";
 
 export const api = new axios.Axios({
   baseURL,

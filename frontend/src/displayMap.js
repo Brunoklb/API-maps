@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import { coordinatesToPosition } from "./coordinatesToPosition";
+import { api } from "./api";
 
 export function DisplayMapImplementation() {
   const [centers, setCenters] = useState([]);
@@ -20,10 +22,9 @@ export function DisplayMapImplementation() {
   }, []);
 
   async function getCenters() {
-    const res = await fetch(
-      "https://3000-googlemaps-jssamples-wy5atajly1u.ws-us77.gitpod.io/bloodCenters"
-    );
-    setCenters(res.json());
+    const res = await api.get("/bloodCenters");
+    const data = JSON.parse(res.data);
+    setCenters(data);
   }
 
   useEffect(() => {
@@ -38,8 +39,10 @@ export function DisplayMapImplementation() {
       onUnmount={onUnmount}
       mapContainerClassName="w-full h-full"
     >
-      {/* Child components, such as markers, info windows, etc. */}
-      <></>
+      {centers.map((center) => {
+        const position = coordinatesToPosition(center.point.coordinates);
+        return <Marker key={center.id} position={position}></Marker>;
+      })}
     </GoogleMap>
   ) : (
     <></>

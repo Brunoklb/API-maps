@@ -1,8 +1,10 @@
+import cors from "cors";
 import express from "express";
 import { PORT } from "./env.js";
 import { BloodCenter } from "./bloodCenter.js";
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 app.get("/bloodCenters", async (req, res) => {

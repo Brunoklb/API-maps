@@ -1,11 +1,12 @@
 import React from "react";
-import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import { mapsKey } from "./env";
 import { brazilCenter } from "./brazilCenter";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 
 export function InsertMapImplementation({ position, setPosition }) {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg",
+    googleMapsApiKey: mapsKey,
   });
 
   return isLoaded ? (

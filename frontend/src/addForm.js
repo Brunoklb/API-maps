@@ -1,15 +1,23 @@
 import { baseURL } from "./baseUrl";
+import { useForm } from "react-hook-form";
 
 export function AddForm({ position }) {
+  
+  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const onSubmit = data => console.log(data);
+
+  console.log(watch("example")); // watch input value by passing the name of it
+
   return (
     <div className="p-4 flex flex-col gap-2 shadow z-10 h-full justify-center">
       <h1 className="text-lg">Adicionar Hemonúcleo</h1>
       <form
         action={baseURL + '/bloodCenters'}
+        onSubmit={handleSubmit(onSubmit)}
         method="post" className="flex flex-col gap-2 p-2">
         <label>
           Nome <span className="text-red-500" title="obrigatório">*</span>
-          <input type="text" id="name" required />
+          <input type="text" id="name"  {...register("name", {})} required />
         </label>
         <label>
           Email

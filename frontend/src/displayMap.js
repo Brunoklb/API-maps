@@ -11,16 +11,6 @@ export function DisplayMapImplementation({ setSelected }) {
     googleMapsApiKey: "AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg",
   });
 
-  const [map, setMap] = React.useState(null);
-
-  const onLoad = useCallback((map) => {
-    setMap(map);
-  }, []);
-
-  const onUnmount = React.useCallback(function callback(map) {
-    setMap(null);
-  }, []);
-
   async function getCenters() {
     const res = await api.get("/bloodCenters");
     const data = JSON.parse(res.data);
@@ -34,9 +24,12 @@ export function DisplayMapImplementation({ setSelected }) {
   return isLoaded ? (
     <GoogleMap
       zoom={4}
-      onLoad={onLoad}
+      streetView={false}
       center={brazilCenter}
-      onUnmount={onUnmount}
+      options={{
+        disableDefaultUI: true,
+        zoomControl: true,
+      }}
       mapContainerClassName="w-full h-full"
     >
       {centers.map((center) => {

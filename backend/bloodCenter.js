@@ -1,8 +1,8 @@
 import { db } from "./db.js";
 import { DataTypes } from "sequelize";
 
-export const Nucleus = db.define(
-  "Nucleus",
+export const BloodCenter = db.define(
+  "BloodCenter",
   {
     name: {
       type: DataTypes.STRING,

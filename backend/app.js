@@ -1,13 +1,12 @@
-import express from "express";
 import "./models.js";
-import { db } from "./db.js";
+import express from "express";
 import { PORT } from "./env.js";
 
 const app = express();
 
 async function run() {
-  await db.sync();
-  await app.listen(PORT, () => {
+  //await db.sync();
+  app.listen(PORT, () => {
     console.log("server running on http://localhost:" + PORT);
   });
 }

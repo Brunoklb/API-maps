@@ -1,40 +1,38 @@
 import { api } from "./api";
 import { RequiredIndicator } from "./requiredIndicator";
+import { useForm } from "react-hook-form";
+import { baseURL } from "./env";
 
 export function AddForm({ position }) {
+  const { register, handleSubmit } = useForm();
 
-  async function handleSumbit(e) {
-    e.preventDefault()
-    const data = new FormData(e.target);
-    await api.post('/bloodCenters', data)
+  async function onSubmit(data) {
+    data.lat = position.lat();
+    data.lng = position.lng();
+    await api.post("/bloodCenters", data);
   }
 
   return (
     <div className="p-4 flex flex-col gap-2 shadow z-10 h-full justify-center">
       <h1 className="text-lg">Adicionar Hemonúcleo</h1>
       <form
-        onSubmit={handleSumbit}
-        className="flex flex-col gap-2 p-2">
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col gap-2 p-2"
+      >
         <label>
           Nome <RequiredIndicator></RequiredIndicator>
-          <input type="text" name="name" required />
+          <input type="text" {...register("name", { required: true })} />
         </label>
         <label>
           Email <RequiredIndicator></RequiredIndicator>
-          <input type="email" name="email" defaultValue={null} />
+          <input type="email" {...register("email")} />
         </label>
-        {position &&
+        {position && (
           <>
-            <input
-              name="lat"
-              type='hidden'
-              value={position.lat()}></input>
-            <input
-              name="lng"
-              type='hidden'
-              value={position.lng()}></input>
+            <input name="lat" type="hidden" value={position.lat()}></input>
+            <input name="lng" type="hidden" value={position.lng()}></input>
           </>
-        }
+        )}
         <button
           type="submit"
           disabled={!position}
@@ -42,9 +40,8 @@ export function AddForm({ position }) {
         >
           Enviar
         </button>
-        {!position &&
-          <div>Clique no mapa para selecionar o local</div>}
+        {!position && <div>Clique no mapa para selecionar o local</div>}
       </form>
-    </div >
+    </div>
   );
 }
